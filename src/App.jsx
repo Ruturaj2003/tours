@@ -1,6 +1,44 @@
+import { useEffect } from 'react';
+import { useState } from 'react';
+import Loading from './Loading';
+import Tours from './Tours';
+
 const url = 'https://course-api.com/react-tours-project';
 
 const App = () => {
-  return <h2>Tours Starter</h2>;
+  const [isLoading, setIsLoading] = useState(false);
+  const [tours, setTours] = useState([]);
+
+  const fetchTours = async () => {
+    setIsLoading(true);
+    try {
+      const resp = await fetch(url);
+      const data = await resp.json();
+
+      setTours(data);
+      console.log(tours);
+    } catch (error) {
+      console.log(error);
+    }
+    setIsLoading(false);
+  };
+
+  useEffect(() => {
+    //fetchTours();
+  }, []);
+
+  if (isLoading) {
+    return (
+      <main>
+        <Loading></Loading>
+      </main>
+    );
+  }
+
+  return (
+    <main>
+      <Tours tours={tours}></Tours>
+    </main>
+  );
 };
 export default App;
